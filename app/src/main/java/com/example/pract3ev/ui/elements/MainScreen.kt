@@ -1,5 +1,6 @@
 package com.example.pract3ev.ui.elements
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.sp
 fun MainScreen(){
 
     var show by rememberSaveable{ mutableStateOf(false) }
+    var call by rememberSaveable{ mutableStateOf(false) }
     var tfError by rememberSaveable{ mutableStateOf(false) }
     var text by rememberSaveable{ mutableStateOf("") }
 
@@ -43,7 +46,7 @@ fun MainScreen(){
             TopAppBar(
                 title = { Text(text = "Cristo Rey")},
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { call = !call }) {
                         Icon(imageVector = Icons.Default.Call, contentDescription = "call momma")
                     }
                 },
@@ -53,7 +56,8 @@ fun MainScreen(){
 
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(Paddingvalues),
+            .padding(Paddingvalues)
+            .background(Color.LightGray),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Plataforma de no-terroristas",
@@ -79,7 +83,7 @@ fun MainScreen(){
             }
         }
         MyDialog(show = show, onDismiss = { show = !show }, onConfirm = {show=!show})
-
+        LLamandoAMamma(call = call, onDismiss = { call = !call }, onConfirm = {call = !call})
         }
     }
 
@@ -101,6 +105,27 @@ fun MyDialog(show : Boolean,
             dismissButton = {
                 TextButton(onClick = { onDismiss() }) {
                     Text(text = "Salir a matar")
+                }
+            }
+        )
+    }
+}
+@Composable
+fun LLamandoAMamma(call : Boolean,
+             onDismiss:() -> Unit,
+             onConfirm:() -> Unit,){
+    if(call) {
+        AlertDialog(title = { Text(text = "7773-2232-1110") },
+            text = { Text(text = "LLamando a tu madre. Pronto vendrá a buscarte") },
+            onDismissRequest = { onDismiss() },
+            confirmButton = {
+                TextButton(onClick = { onConfirm() }) {
+                    Text(text = "Aceptar")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onDismiss() }) {
+                    Text(text = "Huír")
                 }
             }
         )
