@@ -34,6 +34,9 @@ import androidx.compose.ui.unit.sp
 fun MainScreen(){
 
     var show by rememberSaveable{ mutableStateOf(false) }
+    var tfError by rememberSaveable{ mutableStateOf(false) }
+    var text by rememberSaveable{ mutableStateOf("") }
+
 
     Scaffold(
         topBar = {
@@ -46,17 +49,27 @@ fun MainScreen(){
                 },
             )
         },
-    ){
+    ){Paddingvalues->
 
         Column(modifier = Modifier
             .fillMaxSize()
-            .padding(it),
+            .padding(Paddingvalues),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Plataforma de no-terroristas",
                 fontSize = 25.sp,
                 fontStyle = FontStyle.Italic)
-            OutlinedTextField(value="" , onValueChange ={}, label = { Text(text = "Nombre")})
+
+            if (text=="hola"){tfError=true}
+
+            OutlinedTextField(
+                value= text ,
+                onValueChange = {text = it},
+                label = { Text(text = if (tfError)"Error: Palabra prohibida" else "Nombre")},
+                isError = if (tfError)true else false)
+
+
+
             OutlinedTextField(value="" , onValueChange ={}, label = { Text(text = "Apellidos")})
             OutlinedTextField(value="" , onValueChange ={}, label = { Text(text = "Arma favorita")})
             Button(onClick = { show = !show },
