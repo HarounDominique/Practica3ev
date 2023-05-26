@@ -11,7 +11,7 @@ fun EmercyCallDialog(call : Boolean,
              onConfirm:() -> Unit,){
     if(call) {
         AlertDialog(title = { Text(text = "7773-2232-1110") },
-            text = { Text(text = "LLamando a tu madre. Pronto vendrá a buscarte") },
+            text = { Text(text = "LLamando la policía. Pronto vendrá a buscarte") },
             onDismissRequest = { onDismiss() },
             confirmButton = {
                 TextButton(onClick = { onConfirm() }) {
