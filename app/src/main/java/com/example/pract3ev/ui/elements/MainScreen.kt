@@ -3,13 +3,10 @@ package com.example.pract3ev.ui.elements
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -17,7 +14,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,15 +24,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.pract3ev.ui.stateHolders.AppViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(){
 
-    var show by rememberSaveable{ mutableStateOf(false) }
-    var call by rememberSaveable{ mutableStateOf(false) }
+    val AppViewModel: AppViewModel = viewModel()
+
     var tfError by rememberSaveable{ mutableStateOf(false) }
     var text by rememberSaveable{ mutableStateOf("") }
 
@@ -44,9 +41,9 @@ fun MainScreen(){
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Cristo Rey")},
+                title = { Text(text = "LLamada de emergencia")},
                 actions = {
-                    IconButton(onClick = { call = !call }) {
+                    IconButton(onClick = { AppViewModel.onPhoneClick() }) {
                         Icon(imageVector = Icons.Default.Call, contentDescription = "call momma")
                     }
                 },
@@ -76,58 +73,15 @@ fun MainScreen(){
 
             OutlinedTextField(value="" , onValueChange ={}, label = { Text(text = "Apellidos")})
             OutlinedTextField(value="" , onValueChange ={}, label = { Text(text = "Arma favorita")})
-            Button(onClick = { show = !show },
+            Button(onClick = { AppViewModel.onSingUpClick() },
             ) {
-                Text(text = "Afíliate 👍")
+                Text(text = "Registrate")
 
             }
         }
-        MyDialog(show = show, onDismiss = { show = !show }, onConfirm = {show=!show})
-        LLamandoAMamma(call = call, onDismiss = { call = !call }, onConfirm = {call = !call})
+        RegisterDialog(show = AppViewModel.show, onDismiss = {AppViewModel.onSingUpClick() }, onConfirm = {AppViewModel.onSingUpClick()})
+        EmercyCallDialog(call = AppViewModel.call, onDismiss = { AppViewModel.onPhoneClick() }, onConfirm = {AppViewModel.onPhoneClick()})
         }
     }
 
 
-
-@Composable
-fun MyDialog(show : Boolean,
-    onDismiss:() -> Unit,
-    onConfirm:() -> Unit,){
-    if(show==true) {
-        AlertDialog(title = { Text(text = "Bienvenido") },
-            text = { Text(text = "Perteneces a una organización ultra secreta") },
-            onDismissRequest = { onDismiss() },
-            confirmButton = {
-                TextButton(onClick = { onConfirm() }) {
-                    Text(text = "Aceptar")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { onDismiss() }) {
-                    Text(text = "Salir a matar")
-                }
-            }
-        )
-    }
-}
-@Composable
-fun LLamandoAMamma(call : Boolean,
-             onDismiss:() -> Unit,
-             onConfirm:() -> Unit,){
-    if(call) {
-        AlertDialog(title = { Text(text = "7773-2232-1110") },
-            text = { Text(text = "LLamando a tu madre. Pronto vendrá a buscarte") },
-            onDismissRequest = { onDismiss() },
-            confirmButton = {
-                TextButton(onClick = { onConfirm() }) {
-                    Text(text = "Aceptar")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { onDismiss() }) {
-                    Text(text = "Huír")
-                }
-            }
-        )
-    }
-}
